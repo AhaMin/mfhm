@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mfhm.iml" filepath="$PROJECT_DIR$/mfhm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mfhm-complier/mfhm-complier.iml" filepath="$PROJECT_DIR$/mfhm-complier/mfhm-complier.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mfhm-core/mfhm-core.iml" filepath="$PROJECT_DIR$/mfhm-core/mfhm-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mfhm-main/mfhm-main.iml" filepath="$PROJECT_DIR$/mfhm-main/mfhm-main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mfht-annotations/mfht-annotations.iml" filepath="$PROJECT_DIR$/mfht-annotations/mfht-annotations.iml" />
+    </modules>
+  </component>
+</project>
