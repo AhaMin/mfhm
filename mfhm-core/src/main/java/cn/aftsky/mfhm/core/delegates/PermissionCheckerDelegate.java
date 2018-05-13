@@ -1,4 +1,4 @@
-package cn.aftsky.mfhm.main.delegates;
+package cn.aftsky.mfhm.core.delegates;
 
 /**
  * Created by MaoHonglu on 2018/5/12.

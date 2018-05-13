@@ -1,4 +1,4 @@
-package cn.aftsky.mfhm.core;
+package cn.aftsky.mfhm.core.app;
 
 import com.joanzapata.iconify.IconFontDescriptor;
 import com.joanzapata.iconify.Iconify;

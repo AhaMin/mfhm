@@ -1,16 +1,7 @@
 package cn.aftsky.mfhm;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import com.joanzapata.iconify.fonts.FontAwesomeModule;
-
-import cn.aftsky.mfhm.core.Configurator;
-import cn.aftsky.mfhm.core.MFHM;
-import cn.aftsky.mfhm.main.activities.ProxyActivity;
-import cn.aftsky.mfhm.main.delegates.MFHMDelegate;
-import cn.aftsky.mfhm.main.icon.FontMFHMModule;
+import cn.aftsky.mfhm.core.activities.ProxyActivity;
+import cn.aftsky.mfhm.core.delegates.MFHMDelegate;
 
 public class MainActivity extends ProxyActivity {
 

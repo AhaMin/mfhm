@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import cn.aftsky.mfhm.main.delegates.MFHMDelegate;
+import cn.aftsky.mfhm.core.delegates.MFHMDelegate;
 
 /**
  * Created by MaoHonglu on 2018/5/13.

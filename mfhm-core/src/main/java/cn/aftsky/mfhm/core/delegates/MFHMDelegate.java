@@ -1,7 +1,4 @@
-package cn.aftsky.mfhm.main.delegates;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+package cn.aftsky.mfhm.core.delegates;
 
 /**
  * Created by MaoHonglu on 2018/5/12.

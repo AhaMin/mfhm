@@ -1,4 +1,4 @@
-package cn.aftsky.mfhm.core;
+package cn.aftsky.mfhm.core.app;
 
 /**
  * Created by MaoHonglu on 2018/5/5.

@@ -1,9 +1,8 @@
-package cn.aftsky.mfhm.core;
+package cn.aftsky.mfhm.core.app;
 
 import android.content.Context;
 
 import java.util.HashMap;
-import java.util.WeakHashMap;
 
 /**
  * Created by MaoHonglu on 2018/5/5.
@@ -15,7 +14,7 @@ public class MFHM {
         return Configurator.getInstance();
     }
 
-    private static HashMap<String,Object> getConfigurations(){
+    public static HashMap<String,Object> getConfigurations(){
         return Configurator.getInstance().getMfhmConfigs();
     }
     public static Configurator getConfigurator() {
