@@ -28,20 +28,20 @@ public interface RestServer {
 
     //QueryMap中的数据用于URL
     @GET
-    Call<String> get(@Url String url, @QueryMap Map<String, String> params);
+    Call<String> get(@Url String url, @QueryMap Map<String, Object> params);
 
     //FormUrlEncoded表示请求体是一个Form表单
     //FieldMap中的数据用于表单字段
     @FormUrlEncoded
     @POST
-    Call<String> POST(@Url String url, @FieldMap Map<String, String> params);
+    Call<String> post(@Url String url, @FieldMap Map<String, Object> params);
 
     @FormUrlEncoded
     @POST
-    Call<String> PUT(@Url String url, @FieldMap Map<String, String> params);
+    Call<String> put(@Url String url, @FieldMap Map<String, Object> params);
 
     @DELETE
-    Call<String> DELETE(@Url String url,@QueryMap Map<String, String> params);
+    Call<String> delete(@Url String url,@QueryMap Map<String, Object> params);
 
     //Streaming表示响应体的数据用流的形式返回
     @Streaming

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ContentFrameLayout;
 
-import cn.aftsky.mfhm.main.R;
+import cn.aftsky.mfhm.core.R;
 import cn.aftsky.mfhm.core.delegates.MFHMDelegate;
 import me.yokeyword.fragmentation.SupportActivity;
 
