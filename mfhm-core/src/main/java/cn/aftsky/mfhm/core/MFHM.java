@@ -2,6 +2,7 @@ package cn.aftsky.mfhm.core;
 
 import android.content.Context;
 
+import java.util.HashMap;
 import java.util.WeakHashMap;
 
 /**
@@ -14,11 +15,19 @@ public class MFHM {
         return Configurator.getInstance();
     }
 
-    private static WeakHashMap<String,Object> getConfigurations(){
+    private static HashMap<String,Object> getConfigurations(){
         return Configurator.getInstance().getMfhmConfigs();
     }
     public static Configurator getConfigurator() {
         return Configurator.getInstance();
+    }
+
+    public static Context getApplicationContext(){
+//        System.out.println("这里输出的值为：ConfigType.APPLICATION_CONTEXT.name()="+ConfigType.APPLICATION_CONTEXT.name());
+//        HashMap<String,Object> MFHM_CONFIGS=getConfigurations();
+//        System.out.println("这里输出的值为：MFHM_CONFIGS.get(ConfigType.APPLICATION_CONTEXT.name())="+MFHM_CONFIGS.get(ConfigType.APPLICATION_CONTEXT.name()));
+//        System.out.println("这里输出的值为："+(Context) getConfigurations().get(ConfigType.APPLICATION_CONTEXT.name()));
+        return (Context) getConfigurations().get(ConfigType.APPLICATION_CONTEXT.name());
     }
 
 //    public static <T> T getConfiguration(Object key) {
