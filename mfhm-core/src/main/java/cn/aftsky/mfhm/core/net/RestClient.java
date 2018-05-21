@@ -2,6 +2,7 @@ package cn.aftsky.mfhm.core.net;
 
 import android.content.Context;
 
+import java.io.File;
 import java.util.Map;
 
 import cn.aftsky.mfhm.core.net.callback.IError;
@@ -11,10 +12,13 @@ import cn.aftsky.mfhm.core.net.callback.ISuccess;
 import cn.aftsky.mfhm.core.net.callback.RequestCallBack;
 import cn.aftsky.mfhm.core.ui.LoaderStyle;
 import cn.aftsky.mfhm.core.ui.MFHMLoader;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.http.Multipart;
 import retrofit2.http.Url;
 
 /**
@@ -30,9 +34,10 @@ public class RestClient {
     private final IFailure FAILURE;
     private final RequestBody MBODY;
     private final LoaderStyle LOADER_STYLE;
+    private final File FILE;
     private final Context CONTEXT;
 
-    public RestClient(String url, Map<String, Object> params, ISuccess success, IRequest request, IError error, IFailure failure,RequestBody mbody,Context context,LoaderStyle loaderStyle) {
+    public RestClient(String url, Map<String, Object> params, ISuccess success, IRequest request, IError error, IFailure failure,RequestBody mbody,LoaderStyle loaderStyle,File file,Context context) {
         this.URL = url;
         PARAMS.putAll(PARAMS);
         this.SUCCESS = success;
@@ -42,10 +47,46 @@ public class RestClient {
         this.MBODY=mbody;
         this.CONTEXT=context;
         this.LOADER_STYLE=loaderStyle;
+        this.FILE=file;
     }
 
     public static RestClientBuilder builder(){
         return new RestClientBuilder();
+    }
+
+    private Callback<String> getRequestCallBack(){
+        return new RequestCallBack(SUCCESS,REQUEST,ERROR,FAILURE,LOADER_STYLE);
+    }
+
+    /**
+     *     具体的使用方法
+     */
+
+    public final void get(){
+        request(HttpMethod.GET);
+    }
+    public final void post(){
+        if (MBODY==null)
+            request(HttpMethod.POST);
+        else
+            if(!PARAMS.isEmpty()){
+                throw new RuntimeException("params must be null");
+            }
+            else
+                request(HttpMethod.POST_RAW);
+    }
+    public final void delete(){
+        request(HttpMethod.DELETE);
+    }
+    public final void put(){
+        if (MBODY==null)
+            request(HttpMethod.PUT);
+        else
+        if(!PARAMS.isEmpty()){
+            throw new RuntimeException("params must be null");
+        }
+        else
+            request(HttpMethod.PUT_RAW);
     }
 
     //RestClient发送HTTP请求
@@ -69,11 +110,22 @@ public class RestClient {
             case POST:
                 call=server.post(URL,PARAMS);
                 break;
+            case POST_RAW:
+                call=server.postRaw(URL,MBODY);
+                break;
             case PUT:
                 call=server.put(URL,PARAMS);
                 break;
+            case PUT_RAW:
+                call=server.putRaw(URL,MBODY);
+                break;
             case DELETE:
                 call=server.delete(URL,PARAMS);
+                break;
+            case UPLOAD:
+                final RequestBody requestBody = RequestBody.create(MediaType.parse(MultipartBody.FORM.toString()),FILE);
+                final MultipartBody.Part body = MultipartBody.Part.createFormData("file",FILE.getName(),requestBody);
+                call = RestCreater.getRestServer().upload(URL,body);
                 break;
             default:
                 break;
@@ -82,28 +134,7 @@ public class RestClient {
         //确认返回call对象
         if(call!=null){
 //            call.execute();这个call会在主线程当中执行，也就是Ui线程执行
-              call.enqueue(getRequestCallBack());//这个会在新启的一个线程当中执行，推荐使用
+            call.enqueue(getRequestCallBack());//这个会在新启的一个线程当中执行，推荐使用
         }
-    }
-
-    private Callback<String> getRequestCallBack(){
-        return new RequestCallBack(SUCCESS,REQUEST,ERROR,FAILURE,LOADER_STYLE);
-    }
-
-    /**
-     *     具体的使用方法
-     */
-
-    public final void get(){
-        request(HttpMethod.GET);
-    }
-    public final void post(){
-        request(HttpMethod.GET);
-    }
-    public final void delete(){
-        request(HttpMethod.DELETE);
-    }
-    public final void put(){
-        request(HttpMethod.PUT);
     }
 }
