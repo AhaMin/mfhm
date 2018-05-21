@@ -1,5 +1,7 @@
 package cn.aftsky.mfhm.core.net;
 
+import android.content.Context;
+
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -7,6 +9,7 @@ import cn.aftsky.mfhm.core.net.callback.IError;
 import cn.aftsky.mfhm.core.net.callback.IFailure;
 import cn.aftsky.mfhm.core.net.callback.IRequest;
 import cn.aftsky.mfhm.core.net.callback.ISuccess;
+import cn.aftsky.mfhm.core.ui.LoaderStyle;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -23,7 +26,8 @@ public class RestClientBuilder {
     private IError mIError;
     private IFailure mIFailure;
     private RequestBody mBody;
-
+    private Context mContext;
+    private LoaderStyle mLoaderStyle;
 
     public RestClientBuilder() {
     }
@@ -67,7 +71,18 @@ public class RestClientBuilder {
         this.mIFailure = failure;
         return this;
     }
+
+    public final RestClientBuilder loader(Context context,LoaderStyle style){
+        this.mContext=context;
+        this.mLoaderStyle=style;
+        return this;
+    }
+    public final RestClientBuilder loader(Context context){
+        this.mContext=context;
+        this.mLoaderStyle=LoaderStyle.BallSpinFadeLoaderIndicator;
+        return this;
+    }
     public final RestClient build(){
-        return new RestClient(mUrl,PARAMS,mISuccess,mIRequest,mIError,mIFailure,mBody);
+        return new RestClient(mUrl,PARAMS,mISuccess,mIRequest,mIError,mIFailure,mBody,mContext,mLoaderStyle);
     }
 }

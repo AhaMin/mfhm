@@ -34,6 +34,7 @@ public class ExampleDelegate extends MFHMDelegate {
     private void testRestClientBuilder() {
         RestClient restClient = RestClient.builder()
                 .url("http://www.baidu.com/")
+                .loader(getContext())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {

@@ -1,5 +1,7 @@
 package cn.aftsky.mfhm.core.net;
 
+import android.content.Context;
+
 import java.util.Map;
 
 import cn.aftsky.mfhm.core.net.callback.IError;
@@ -7,6 +9,8 @@ import cn.aftsky.mfhm.core.net.callback.IFailure;
 import cn.aftsky.mfhm.core.net.callback.IRequest;
 import cn.aftsky.mfhm.core.net.callback.ISuccess;
 import cn.aftsky.mfhm.core.net.callback.RequestCallBack;
+import cn.aftsky.mfhm.core.ui.LoaderStyle;
+import cn.aftsky.mfhm.core.ui.MFHMLoader;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -25,8 +29,10 @@ public class RestClient {
     private final IError ERROR;
     private final IFailure FAILURE;
     private final RequestBody MBODY;
+    private final LoaderStyle LOADER_STYLE;
+    private final Context CONTEXT;
 
-    public RestClient(String url, Map<String, Object> params, ISuccess success, IRequest request, IError error, IFailure failure,RequestBody mbody) {
+    public RestClient(String url, Map<String, Object> params, ISuccess success, IRequest request, IError error, IFailure failure,RequestBody mbody,Context context,LoaderStyle loaderStyle) {
         this.URL = url;
         PARAMS.putAll(PARAMS);
         this.SUCCESS = success;
@@ -34,6 +40,8 @@ public class RestClient {
         this.ERROR = error;
         this.FAILURE = failure;
         this.MBODY=mbody;
+        this.CONTEXT=context;
+        this.LOADER_STYLE=loaderStyle;
     }
 
     public static RestClientBuilder builder(){
@@ -48,6 +56,9 @@ public class RestClient {
         //确认请求不为空，并且在RequestStart之前做一些初始化工作
         if(REQUEST!=null){
             REQUEST.onRequestStart();
+        }
+        if(LOADER_STYLE!=null){
+            MFHMLoader.showLoading(CONTEXT,LOADER_STYLE.name());
         }
 
         //开始执行请求
@@ -76,7 +87,7 @@ public class RestClient {
     }
 
     private Callback<String> getRequestCallBack(){
-        return new RequestCallBack(SUCCESS,REQUEST,ERROR,FAILURE);
+        return new RequestCallBack(SUCCESS,REQUEST,ERROR,FAILURE,LOADER_STYLE);
     }
 
     /**
