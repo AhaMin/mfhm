@@ -5,8 +5,7 @@ import android.os.AsyncTask;
 import java.io.File;
 import java.io.InputStream;
 
-import cn.aftsky.mfhm.core.net.callback.IRequest;
-import cn.aftsky.mfhm.core.net.callback.ISuccess;
+import cn.aftsky.mfhm.core.net.callback.IResponseListener;
 import cn.aftsky.mfhm.core.util.FileUtil;
 import okhttp3.ResponseBody;
 
@@ -15,12 +14,11 @@ import okhttp3.ResponseBody;
  */
 
 public class SaveFileTask extends AsyncTask<Object, Void, File> {
-    private final IRequest REQUEST;
-    private final ISuccess SUCCESS;
 
-    SaveFileTask(IRequest REQUEST, ISuccess SUCCESS) {
-        this.REQUEST = REQUEST;
-        this.SUCCESS = SUCCESS;
+    private final IResponseListener RESPONSELISTENER;
+
+    SaveFileTask(IResponseListener responseListener) {
+        this.RESPONSELISTENER = responseListener;
     }
 
     @Override
@@ -46,11 +44,7 @@ public class SaveFileTask extends AsyncTask<Object, Void, File> {
     @Override
     protected void onPostExecute(File file) {
         super.onPostExecute(file);
-        if (SUCCESS != null) {
-            SUCCESS.onSuccess(file.getPath());
-        }
-        if (REQUEST != null) {
-            REQUEST.onRequestEnd();
-        }
+        RESPONSELISTENER.onSuccess(file.getPath());
+        RESPONSELISTENER.onRequestEnd();
     }
 }

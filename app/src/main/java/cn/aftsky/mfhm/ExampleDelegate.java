@@ -7,10 +7,8 @@ import android.widget.Toast;
 
 import cn.aftsky.mfhm.core.delegates.MFHMDelegate;
 import cn.aftsky.mfhm.core.net.RestClient;
-import cn.aftsky.mfhm.core.net.RestClientBuilder;
-import cn.aftsky.mfhm.core.net.callback.IError;
-import cn.aftsky.mfhm.core.net.callback.IFailure;
-import cn.aftsky.mfhm.core.net.callback.ISuccess;
+import cn.aftsky.mfhm.core.net.callback.IResponseListener;
+import cn.aftsky.mfhm.core.net.callback.ResponseListenerAdapter;
 
 /**
  * Created by MaoHonglu on 2018/5/13.
@@ -35,22 +33,21 @@ public class ExampleDelegate extends MFHMDelegate {
         RestClient restClient = RestClient.builder()
                 .url("http://www.baidu.com/")
                 .loader(getContext())
-                .success(new ISuccess() {
+                .responseListener(new ResponseListenerAdapter(){
                     @Override
                     public void onSuccess(String response) {
-                        Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
+                        super.onSuccess(response);
+                        Toast.makeText(getContext(),response, Toast.LENGTH_LONG);
                     }
-                })
-                .failure(new IFailure() {
+
                     @Override
                     public void onFailure() {
-
+                        super.onFailure();
                     }
-                })
-                .error(new IError() {
+
                     @Override
                     public void onError(int code, String msg) {
-
+                        super.onError(code, msg);
                     }
                 }).build();
         restClient.get(); //调用get方法执行
@@ -62,22 +59,21 @@ public class ExampleDelegate extends MFHMDelegate {
                 .params("username","kk")
                 .params("password","00")
                 .loader(getContext())
-                .success(new ISuccess() {
+                .responseListener(new ResponseListenerAdapter(){
                     @Override
                     public void onSuccess(String response) {
-                        Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
+                        super.onSuccess(response);
+                        Toast.makeText(getContext(),response, Toast.LENGTH_LONG);
                     }
-                })
-                .failure(new IFailure() {
+
                     @Override
                     public void onFailure() {
-
+                        super.onFailure();
                     }
-                })
-                .error(new IError() {
+
                     @Override
                     public void onError(int code, String msg) {
-
+                        super.onError(code, msg);
                     }
                 }).build();
         restClient.get(); //调用get方法执行

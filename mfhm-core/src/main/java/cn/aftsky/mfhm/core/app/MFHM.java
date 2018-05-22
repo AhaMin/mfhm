@@ -4,6 +4,8 @@ import android.content.Context;
 
 import java.util.HashMap;
 
+import cn.aftsky.mfhm.core.constants.ConfigType;
+
 /**
  * Created by MaoHonglu on 2018/5/5.
  */

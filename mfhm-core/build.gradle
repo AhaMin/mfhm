@@ -44,7 +44,8 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-scalars:2.3.0'
-
+    //Jackson依赖
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
     //Loader依赖
     compile 'com.wang.avi:library:2.1.3'
 

@@ -1,4 +1,4 @@
-package cn.aftsky.mfhm.core.app;
+package cn.aftsky.mfhm.core.constants;
 
 /**
  * Created by MaoHonglu on 2018/5/5.

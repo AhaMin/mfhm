@@ -6,6 +6,8 @@ import com.joanzapata.iconify.Iconify;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cn.aftsky.mfhm.core.constants.ConfigType;
+
 /**
  * Created by MaoHonglu on 2018/5/5.
  * 存储各种配置项和配置项的信息

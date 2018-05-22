@@ -5,10 +5,7 @@ import android.os.AsyncTask;
 import java.util.Map;
 
 import cn.aftsky.mfhm.core.net.RestCreater;
-import cn.aftsky.mfhm.core.net.callback.IError;
-import cn.aftsky.mfhm.core.net.callback.IFailure;
-import cn.aftsky.mfhm.core.net.callback.IRequest;
-import cn.aftsky.mfhm.core.net.callback.ISuccess;
+import cn.aftsky.mfhm.core.net.callback.IResponseListener;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,26 +21,18 @@ public class DownloadHandler {
     private final String DOWNLOAD_DIR;
     private final String EXTENSION;
     private final String NAME;
-    private final IRequest REQUEST;
-    private final ISuccess SUCCESS;
-    private final IError ERROR;
-    private final IFailure FAILURE;
+    private final IResponseListener RESPONSELISTENER;
 
-    public DownloadHandler(String url, String download_dir, String extension, String name, IRequest request, ISuccess success, IError error, IFailure failure) {
+    public DownloadHandler(String url, String download_dir, String extension, String name, IResponseListener responseListener) {
         this.URL = url;
         this.DOWNLOAD_DIR = download_dir;
         this.EXTENSION = extension;
         this.NAME = name;
-        this.REQUEST = request;
-        this.SUCCESS = success;
-        this.ERROR = error;
-        this.FAILURE = failure;
+        this.RESPONSELISTENER=responseListener;
     }
 
     public final void handlerDownload(){
-        if(REQUEST != null){
-            REQUEST.onRequestStart();
-        }
+        RESPONSELISTENER.onRequestStart();
         RestCreater
                 .getRestServer()
                 .download(URL, PARAMS)
@@ -52,30 +41,24 @@ public class DownloadHandler {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
                             final ResponseBody responseBody = response.body();
-                            final SaveFileTask task = new SaveFileTask(REQUEST, SUCCESS);
+                            final SaveFileTask task = new SaveFileTask(RESPONSELISTENER);
                             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
                                     DOWNLOAD_DIR, EXTENSION, responseBody, NAME);
 
                             //这里一定要注意判断，否则文件下载不全
                             if (task.isCancelled()) {
-                                if (REQUEST != null) {
-                                    REQUEST.onRequestEnd();
-                                }
+                                    RESPONSELISTENER.onRequestEnd();
                             }
                         } else {
-                            if (ERROR != null) {
-                                ERROR.onError(response.code(), response.message());
-                            }
+                                RESPONSELISTENER.onError(response.code(), response.message());
                         }
                         RestCreater.getParams().clear();
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        if (FAILURE != null) {
-                            FAILURE.onFailure();
+                            RESPONSELISTENER.onFailure();
                             RestCreater.getParams().clear();
-                        }
                     }
                 });
     }

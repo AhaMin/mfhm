@@ -6,11 +6,8 @@ import java.io.File;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import cn.aftsky.mfhm.core.net.callback.IError;
-import cn.aftsky.mfhm.core.net.callback.IFailure;
-import cn.aftsky.mfhm.core.net.callback.IRequest;
-import cn.aftsky.mfhm.core.net.callback.ISuccess;
-import cn.aftsky.mfhm.core.ui.LoaderStyle;
+import cn.aftsky.mfhm.core.constants.LoaderStyle;
+import cn.aftsky.mfhm.core.net.callback.IResponseListener;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -21,11 +18,8 @@ import okhttp3.RequestBody;
 
 public class RestClientBuilder {
     private String mUrl=null;
-    private static final Map<String ,Object> PARAMS=RestCreater.getParams();
-    private ISuccess mISuccess=null;
-    private IRequest mIRequest=null;
-    private IError mIError=null;
-    private IFailure mIFailure=null;
+    private Map<String ,Object> PARAMS=new WeakHashMap<>();
+    private IResponseListener mResponseListener;
     private RequestBody mBody=null;
     private Context mContext=null;
     private LoaderStyle mLoaderStyle=null;
@@ -57,23 +51,9 @@ public class RestClientBuilder {
         return this;
     }
 
-    public final RestClientBuilder success(ISuccess success) {
-        this.mISuccess = success;
-        return this;
-    }
 
-    public final RestClientBuilder request(IRequest request) {
-        this.mIRequest = request;
-        return this;
-    }
-
-    public final RestClientBuilder error(IError error) {
-        this.mIError = error;
-        return this;
-    }
-
-    public final RestClientBuilder failure(IFailure failure) {
-        this.mIFailure = failure;
+    public final RestClientBuilder responseListener(IResponseListener responseListener) {
+        this.mResponseListener=responseListener;
         return this;
     }
 
@@ -108,6 +88,6 @@ public class RestClientBuilder {
         return this;
     }
     public final RestClient build(){
-        return new RestClient(mUrl,PARAMS,mISuccess,mIRequest,mIError,mIFailure,mBody,mLoaderStyle,mFile,mDownloader,mExtension,mName,mContext);
+        return new RestClient(mUrl,PARAMS,mResponseListener,mBody,mLoaderStyle,mFile,mDownloader,mExtension,mName,mContext);
     }
 }

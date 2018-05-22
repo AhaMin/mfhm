@@ -3,7 +3,7 @@ package cn.aftsky.mfhm.core.net;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
-import cn.aftsky.mfhm.core.app.ConfigType;
+import cn.aftsky.mfhm.core.constants.ConfigType;
 import cn.aftsky.mfhm.core.app.MFHM;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -14,13 +14,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 
 public class RestCreater {
-
-    /**
-     * 获取Params
-     */
-    public static WeakHashMap<String,Object> getParams(){
-        return ParamsHolder.PARAMS;
-    }
 
     /**
      * 获取RestServer的代理对象
@@ -55,9 +48,5 @@ public class RestCreater {
      */
     private static final class RestServerHolder{
         private static final RestServer REST_SERVER=RetrofitHolder.RETROFIT_CLIENT.create(RestServer.class);
-    }
-
-    public static final class ParamsHolder{
-        public static final WeakHashMap<String,Object> PARAMS=new WeakHashMap<>();
     }
 }

@@ -4,23 +4,19 @@ import android.content.Context;
 
 import java.io.File;
 import java.util.Map;
+import java.util.WeakHashMap;
 
-import cn.aftsky.mfhm.core.net.callback.IError;
-import cn.aftsky.mfhm.core.net.callback.IFailure;
-import cn.aftsky.mfhm.core.net.callback.IRequest;
-import cn.aftsky.mfhm.core.net.callback.ISuccess;
+import cn.aftsky.mfhm.core.constants.HttpMethod;
+import cn.aftsky.mfhm.core.net.callback.IResponseListener;
 import cn.aftsky.mfhm.core.net.callback.RequestCallBack;
 import cn.aftsky.mfhm.core.net.download.DownloadHandler;
-import cn.aftsky.mfhm.core.ui.LoaderStyle;
+import cn.aftsky.mfhm.core.constants.LoaderStyle;
 import cn.aftsky.mfhm.core.ui.MFHMLoader;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.http.Multipart;
-import retrofit2.http.Url;
 
 /**
  * Created by MaoHonglu on 2018/5/13.
@@ -28,11 +24,8 @@ import retrofit2.http.Url;
 
 public class RestClient {
     private final String URL;
-    private static final Map<String, Object> PARAMS = RestCreater.getParams();
-    private final ISuccess SUCCESS;
-    private final IRequest REQUEST;
-    private final IError ERROR;
-    private final IFailure FAILURE;
+    private final Map<String, Object> PARAMS =new WeakHashMap<>();
+    private final IResponseListener RESPONSELISTENER;
     private final RequestBody MBODY;
     private final LoaderStyle LOADER_STYLE;
     private final File FILE;
@@ -41,13 +34,10 @@ public class RestClient {
     private final String NAME;
     private final Context CONTEXT;
 
-    public RestClient(String url, Map<String, Object> params, ISuccess success, IRequest request, IError error, IFailure failure, RequestBody mbody, LoaderStyle loaderStyle, File file, String downloader_dir, String extension, String name, Context context) {
+    public RestClient(String url, Map<String, Object> params,IResponseListener iResponseListener, RequestBody mbody, LoaderStyle loaderStyle, File file, String downloader_dir, String extension, String name, Context context) {
         this.URL = url;
         PARAMS.putAll(PARAMS);
-        this.SUCCESS = success;
-        this.REQUEST = request;
-        this.ERROR = error;
-        this.FAILURE = failure;
+        this.RESPONSELISTENER=iResponseListener;
         this.MBODY = mbody;
         this.CONTEXT = context;
         this.LOADER_STYLE = loaderStyle;
@@ -62,7 +52,7 @@ public class RestClient {
     }
 
     private Callback<String> getRequestCallBack() {
-        return new RequestCallBack(SUCCESS, REQUEST, ERROR, FAILURE, LOADER_STYLE);
+        return new RequestCallBack(RESPONSELISTENER, LOADER_STYLE);
     }
 
     /**
@@ -100,17 +90,18 @@ public class RestClient {
     }
 
     public final void download(){
-        new DownloadHandler(URL,DOWNLOAD_DIR,EXTENSION,NAME,REQUEST,SUCCESS,ERROR,FAILURE).handlerDownload();
+        new DownloadHandler(URL,DOWNLOAD_DIR,EXTENSION,NAME,RESPONSELISTENER).handlerDownload();
     }
     //RestClient发送HTTP请求
     private void request(HttpMethod method) {
         final RestServer server = RestCreater.getRestServer();
+
+        //返回的call对象
         Call<String> call = null;
 
-        //确认请求不为空，并且在RequestStart之前做一些初始化工作
-        if (REQUEST != null) {
-            REQUEST.onRequestStart();
-        }
+        //在RequestStart之前做一些初始化工作
+        RESPONSELISTENER.onRequestStart();
+
         if (LOADER_STYLE != null) {
             MFHMLoader.showLoading(CONTEXT, LOADER_STYLE.name());
         }

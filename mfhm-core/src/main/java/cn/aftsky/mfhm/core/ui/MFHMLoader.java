@@ -11,6 +11,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.util.ArrayList;
 
 import cn.aftsky.mfhm.core.R;
+import cn.aftsky.mfhm.core.constants.LoaderStyle;
 import cn.aftsky.mfhm.core.util.DimenUtil;
 
 /**
