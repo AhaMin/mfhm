@@ -24,8 +24,8 @@ public class ExampleDelegate extends MFHMDelegate {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-        testRestClientBuilder();
         System.out.println("视图绑定完毕");
+        testRestClientBuilder();
     }
 
     /**
