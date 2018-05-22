@@ -53,6 +53,33 @@ public class ExampleDelegate extends MFHMDelegate {
 
                     }
                 }).build();
-        restClient.get();
+        restClient.get(); //调用get方法执行
+    }
+
+    private void testRestClientBuilder2() {
+        RestClient restClient = RestClient.builder()
+                .url("http://www.baidu.com/")
+                .params("username","kk")
+                .params("password","00")
+                .loader(getContext())
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+
+                    }
+                }).build();
+        restClient.get(); //调用get方法执行
     }
 }

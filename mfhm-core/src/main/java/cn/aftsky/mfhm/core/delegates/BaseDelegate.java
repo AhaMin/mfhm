@@ -21,8 +21,9 @@ public abstract class BaseDelegate extends SwipeBackFragment{
     public abstract Object setLayout();
 
     public abstract void onBindView(@Nullable Bundle savedInstanceState,View rootView);
-    @Nullable
+
     /*根据Layout返回一个Fragment,一般就是根Fragment*/
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView=null;

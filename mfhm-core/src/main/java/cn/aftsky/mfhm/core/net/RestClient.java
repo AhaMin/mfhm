@@ -10,6 +10,7 @@ import cn.aftsky.mfhm.core.net.callback.IFailure;
 import cn.aftsky.mfhm.core.net.callback.IRequest;
 import cn.aftsky.mfhm.core.net.callback.ISuccess;
 import cn.aftsky.mfhm.core.net.callback.RequestCallBack;
+import cn.aftsky.mfhm.core.net.download.DownloadHandler;
 import cn.aftsky.mfhm.core.ui.LoaderStyle;
 import cn.aftsky.mfhm.core.ui.MFHMLoader;
 import okhttp3.MediaType;
@@ -27,7 +28,7 @@ import retrofit2.http.Url;
 
 public class RestClient {
     private final String URL;
-    private static final Map<String ,Object> PARAMS=RestCreater.getParams();
+    private static final Map<String, Object> PARAMS = RestCreater.getParams();
     private final ISuccess SUCCESS;
     private final IRequest REQUEST;
     private final IError ERROR;
@@ -35,104 +36,116 @@ public class RestClient {
     private final RequestBody MBODY;
     private final LoaderStyle LOADER_STYLE;
     private final File FILE;
+    private final String DOWNLOAD_DIR;
+    private final String EXTENSION;
+    private final String NAME;
     private final Context CONTEXT;
 
-    public RestClient(String url, Map<String, Object> params, ISuccess success, IRequest request, IError error, IFailure failure,RequestBody mbody,LoaderStyle loaderStyle,File file,Context context) {
+    public RestClient(String url, Map<String, Object> params, ISuccess success, IRequest request, IError error, IFailure failure, RequestBody mbody, LoaderStyle loaderStyle, File file, String downloader_dir, String extension, String name, Context context) {
         this.URL = url;
         PARAMS.putAll(PARAMS);
         this.SUCCESS = success;
         this.REQUEST = request;
         this.ERROR = error;
         this.FAILURE = failure;
-        this.MBODY=mbody;
-        this.CONTEXT=context;
-        this.LOADER_STYLE=loaderStyle;
-        this.FILE=file;
+        this.MBODY = mbody;
+        this.CONTEXT = context;
+        this.LOADER_STYLE = loaderStyle;
+        this.FILE = file;
+        this.DOWNLOAD_DIR = downloader_dir;
+        this.EXTENSION = extension;
+        this.NAME = name;
     }
 
-    public static RestClientBuilder builder(){
+    public static RestClientBuilder builder() {
         return new RestClientBuilder();
     }
 
-    private Callback<String> getRequestCallBack(){
-        return new RequestCallBack(SUCCESS,REQUEST,ERROR,FAILURE,LOADER_STYLE);
+    private Callback<String> getRequestCallBack() {
+        return new RequestCallBack(SUCCESS, REQUEST, ERROR, FAILURE, LOADER_STYLE);
     }
 
     /**
-     *     具体的使用方法
+     * 具体的使用方法
      */
 
-    public final void get(){
+    public final void get() {
         request(HttpMethod.GET);
     }
-    public final void post(){
-        if (MBODY==null)
+
+    public final void post() {
+        if (MBODY == null)
             request(HttpMethod.POST);
-        else
-            if(!PARAMS.isEmpty()){
-                throw new RuntimeException("params must be null");
-            }
-            else
-                request(HttpMethod.POST_RAW);
+        else if (!PARAMS.isEmpty()) {
+            throw new RuntimeException("params must be null");
+        } else
+            request(HttpMethod.POST_RAW);
     }
-    public final void delete(){
+
+    public final void delete() {
         request(HttpMethod.DELETE);
     }
-    public final void put(){
-        if (MBODY==null)
+
+    public final void put() {
+        if (MBODY == null)
             request(HttpMethod.PUT);
-        else
-        if(!PARAMS.isEmpty()){
+        else if (!PARAMS.isEmpty()) {
             throw new RuntimeException("params must be null");
-        }
-        else
+        } else
             request(HttpMethod.PUT_RAW);
     }
 
+    public final void upload(){
+        request(HttpMethod.UPLOAD);
+    }
+
+    public final void download(){
+        new DownloadHandler(URL,DOWNLOAD_DIR,EXTENSION,NAME,REQUEST,SUCCESS,ERROR,FAILURE).handlerDownload();
+    }
     //RestClient发送HTTP请求
-    private void request(HttpMethod method){
+    private void request(HttpMethod method) {
         final RestServer server = RestCreater.getRestServer();
         Call<String> call = null;
 
         //确认请求不为空，并且在RequestStart之前做一些初始化工作
-        if(REQUEST!=null){
+        if (REQUEST != null) {
             REQUEST.onRequestStart();
         }
-        if(LOADER_STYLE!=null){
-            MFHMLoader.showLoading(CONTEXT,LOADER_STYLE.name());
+        if (LOADER_STYLE != null) {
+            MFHMLoader.showLoading(CONTEXT, LOADER_STYLE.name());
         }
 
         //开始执行请求
-        switch (method){
+        switch (method) {
             case GET:
-                call = server.get(URL,PARAMS);
+                call = server.get(URL, PARAMS);
                 break;
             case POST:
-                call=server.post(URL,PARAMS);
+                call = server.post(URL, PARAMS);
                 break;
             case POST_RAW:
-                call=server.postRaw(URL,MBODY);
+                call = server.postRaw(URL, MBODY);
                 break;
             case PUT:
-                call=server.put(URL,PARAMS);
+                call = server.put(URL, PARAMS);
                 break;
             case PUT_RAW:
-                call=server.putRaw(URL,MBODY);
+                call = server.putRaw(URL, MBODY);
                 break;
             case DELETE:
-                call=server.delete(URL,PARAMS);
+                call = server.delete(URL, PARAMS);
                 break;
             case UPLOAD:
-                final RequestBody requestBody = RequestBody.create(MediaType.parse(MultipartBody.FORM.toString()),FILE);
-                final MultipartBody.Part body = MultipartBody.Part.createFormData("file",FILE.getName(),requestBody);
-                call = RestCreater.getRestServer().upload(URL,body);
+                final RequestBody requestBody = RequestBody.create(MediaType.parse(MultipartBody.FORM.toString()), FILE);
+                final MultipartBody.Part body = MultipartBody.Part.createFormData("file", FILE.getName(), requestBody);
+                call = RestCreater.getRestServer().upload(URL, body);
                 break;
             default:
                 break;
         }
 
         //确认返回call对象
-        if(call!=null){
+        if (call != null) {
 //            call.execute();这个call会在主线程当中执行，也就是Ui线程执行
             call.enqueue(getRequestCallBack());//这个会在新启的一个线程当中执行，推荐使用
         }

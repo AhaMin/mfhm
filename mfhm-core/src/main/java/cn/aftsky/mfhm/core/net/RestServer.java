@@ -35,7 +35,7 @@ public interface RestServer {
     Call<String> get(@Url String url, @QueryMap Map<String, Object> params);
 
     //FormUrlEncoded表示请求体是一个Form表单
-    //FieldMap中的数据用于表单字段
+    //FieldMap中的数据用于表单字段，Map的key作为表单的键
     @FormUrlEncoded
     @POST
     Call<String> post(@Url String url, @FieldMap Map<String, Object> params);
