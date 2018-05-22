@@ -3,6 +3,7 @@ package cn.aftsky.mfhm.core.net.download;
 import android.os.AsyncTask;
 
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import cn.aftsky.mfhm.core.net.RestCreater;
 import cn.aftsky.mfhm.core.net.callback.IResponseListener;
@@ -17,7 +18,7 @@ import retrofit2.Response;
 
 public class DownloadHandler {
     private final String URL;
-    private static final Map<String, Object> PARAMS = RestCreater.getParams();
+    private static final Map<String, Object> PARAMS = new WeakHashMap<>();
     private final String DOWNLOAD_DIR;
     private final String EXTENSION;
     private final String NAME;
@@ -52,13 +53,13 @@ public class DownloadHandler {
                         } else {
                                 RESPONSELISTENER.onError(response.code(), response.message());
                         }
-                        RestCreater.getParams().clear();
+                        PARAMS.clear();
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                             RESPONSELISTENER.onFailure();
-                            RestCreater.getParams().clear();
+                            PARAMS.clear();
                     }
                 });
     }
