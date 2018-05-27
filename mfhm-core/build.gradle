@@ -26,8 +26,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    //Android library
     compile group: 'com.android.support', name: 'design', version: '25.3.1'
+    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.3.1'
+    compile group: 'com.android.support', name: 'support-v4', version: '25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    //fontawesom图标依赖
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2' // (v4.5)
     compile 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2' // (v2.0.1)
     // Fragmentation的依赖
@@ -53,6 +57,7 @@ dependencies {
     compile 'com.bigkoo:convenientbanner:2.0.5'
     compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
 
+    //test
     testCompile 'junit:junit:4.12'
     compile project(':mfht-annotations')
 }

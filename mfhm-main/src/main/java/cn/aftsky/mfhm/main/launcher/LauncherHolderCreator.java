@@ -1,4 +1,4 @@
-package cn.aftsky.mfhm.main.lanuncher;
+package cn.aftsky.mfhm.main.launcher;
 
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 

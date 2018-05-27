@@ -61,6 +61,7 @@ public class PreferenceUtil {
                 .edit()
                 .putBoolean(key, flag)
                 .apply();
+        System.out.println("执行了setAppFlag这个方法！");
     }
 
     public static boolean getAppFlag(String key) {

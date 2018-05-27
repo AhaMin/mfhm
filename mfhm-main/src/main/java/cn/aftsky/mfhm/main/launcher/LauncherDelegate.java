@@ -1,6 +1,5 @@
-package cn.aftsky.mfhm.main.lanuncher;
+package cn.aftsky.mfhm.main.launcher;
 
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,23 +7,24 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
+import java.text.MessageFormat;
 import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.aftsky.mfhm.core.app.MFHM;
 import cn.aftsky.mfhm.core.util.BaseTimerTask;
+import cn.aftsky.mfhm.core.util.ITimerListener;
 import cn.aftsky.mfhm.core.util.PreferenceUtil;
 import cn.aftsky.mfhm.main.R2;
 import cn.aftsky.mfhm.core.delegates.MFHMDelegate;
-import cn.aftsky.mfhm.core.ui.MFHMLoader;
 import cn.aftsky.mfhm.main.R;
 
 /**
+ * 启动图首页
  * Created by MaoHonglu on 2018/5/24.
  */
 
-public class LannuncherDelegate extends MFHMDelegate {
+public class LauncherDelegate extends MFHMDelegate implements ITimerListener{
 
     @BindView(R2.id.app_launcher_timer)
     AppCompatTextView mTvTimer = null;
@@ -66,27 +66,29 @@ public class LannuncherDelegate extends MFHMDelegate {
         initTimer();
     }
 
-    //判断是否显示滑动启动页
+    //判断是否显示滑动启动页,也就是判断是否是第一次打开App
     private void checkIsShowScroll() {
+//        System.out.println("PreferenceUtil.getAppFlag(ScrollLauncherTag.HAS_FIRST_LAUNCHER_APP.name()):"+PreferenceUtil.getAppFlag(ScrollLauncherTag.HAS_FIRST_LAUNCHER_APP.name()));
         if (!PreferenceUtil.getAppFlag(ScrollLauncherTag.HAS_FIRST_LAUNCHER_APP.name())) {
-            getSupportDelegate().start(new LauncherScrollDelegate(), SINGLETASK);
+//            getSupportDelegate().start(new LauncherScrollDelegate(), SINGLETASK); 不行
+            getSupportDelegate().startWithPop(new LauncherScrollDelegate());
         } else {
-            //检查用户是否登录了APP
-            AccountManager.checkAccount(new IUserChecker() {
-                @Override
-                public void onSignIn() {
-                    if (mILauncherListener != null) {
-                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.SIGNED);
-                    }
-                }
-
-                @Override
-                public void onNotSignIn() {
-                    if (mILauncherListener != null) {
-                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.NOT_SIGNED);
-                    }
-                }
-            });
+              //检查用户是否登录了APP
+//            AccountManager.checkAccount(new IUserChecker() {
+//                @Override
+//                public void onSignIn() {
+//                    if (mILauncherListener != null) {
+//                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.SIGNED);
+//                    }
+//                }
+//
+//                @Override
+//                public void onNotSignIn() {
+//                    if (mILauncherListener != null) {
+//                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.NOT_SIGNED);
+//                    }
+//                }
+//            });
         }
     }
 
@@ -109,5 +111,4 @@ public class LannuncherDelegate extends MFHMDelegate {
             }
         });
     }
-
 }
