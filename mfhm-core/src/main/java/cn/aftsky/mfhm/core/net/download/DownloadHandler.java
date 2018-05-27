@@ -40,6 +40,7 @@ public class DownloadHandler {
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        //如果响应成功
                         if (response.isSuccessful()) {
                             final ResponseBody responseBody = response.body();
                             final SaveFileTask task = new SaveFileTask(RESPONSELISTENER);
@@ -50,7 +51,9 @@ public class DownloadHandler {
                             if (task.isCancelled()) {
                                     RESPONSELISTENER.onRequestEnd();
                             }
-                        } else {
+                        }
+                        //响应失败
+                        else {
                                 RESPONSELISTENER.onError(response.code(), response.message());
                         }
                         PARAMS.clear();

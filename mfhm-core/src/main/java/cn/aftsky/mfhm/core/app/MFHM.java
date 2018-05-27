@@ -17,7 +17,7 @@ public class MFHM {
         return Configurator.getInstance();
     }
 
-    public static HashMap<String,Object> getConfigurations(){
+    public static HashMap<Object,Object> getConfigurations(){
         return Configurator.getInstance().getMfhmConfigs();
     }
     public static Configurator getConfigurator() {
@@ -32,7 +32,7 @@ public class MFHM {
         return (Context) getConfigurations().get(ConfigType.APPLICATION_CONTEXT.name());
     }
 
-//    public static <T> T getConfiguration(Object key) {
-//        return getConfigurator().getConfiguration(key);
-//    }
+    public static <T> T getConfiguration(Object key) {
+        return getConfigurator().getConfiguration(key);
+    }
 }

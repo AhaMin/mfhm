@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.aftsky.mfhm.core.constants.ConfigType;
+import okhttp3.Interceptor;
 
 /**
  * Created by MaoHonglu on 2018/5/5.
@@ -16,8 +17,9 @@ import cn.aftsky.mfhm.core.constants.ConfigType;
 
 public class Configurator {
 
-    private static final HashMap<String,Object> MFHM_CONFIGS=new HashMap<>();
+    private static final HashMap<Object,Object> MFHM_CONFIGS=new HashMap<>();
     private static final ArrayList<IconFontDescriptor> ICONS = new ArrayList<>();
+    private static final ArrayList<Interceptor> INTERCEPTORS= new ArrayList<>();
 
     private Configurator(){
         MFHM_CONFIGS.put(ConfigType.CONFIG_READY.name(),false);
@@ -32,13 +34,24 @@ public class Configurator {
         private static final Configurator INSTANCE = new Configurator();
     }
 
-    final HashMap<String,Object> getMfhmConfigs(){
+    final HashMap<Object,Object> getMfhmConfigs(){
         return MFHM_CONFIGS;
     }
 
     public final Configurator withApiHost(String host){
-        MFHM_CONFIGS.put(ConfigType.API_HOST.name(),host);
+        MFHM_CONFIGS.put(ConfigType.API_HOST,host);
         System.out.println("初始化host"+host+"中...");
+        return this;
+    }
+
+    public final Configurator withInterceptor(Interceptor interceptor){
+        INTERCEPTORS.add(interceptor);
+        MFHM_CONFIGS.put(ConfigType.INTERCEPTOR,INTERCEPTORS);
+        return this;
+    }
+    public final Configurator withInterceptors(ArrayList<Interceptor> interceptors){
+        INTERCEPTORS.addAll(interceptors);
+        MFHM_CONFIGS.put(ConfigType.INTERCEPTOR,INTERCEPTORS);
         return this;
     }
 
@@ -59,9 +72,13 @@ public class Configurator {
     }
 
     @SuppressWarnings("unchecked")
-    final <T> T getConfiguration(Enum<ConfigType> key){
+    final <T> T getConfiguration(Object key) {
         checkConfiguration();
-        return (T)MFHM_CONFIGS.get(key);
+        final Object value = MFHM_CONFIGS.get(key);
+        if (value == null) {
+            throw new NullPointerException(key.toString() + " IS NULL");
+        }
+        return (T) MFHM_CONFIGS.get(key);
     }
 
     public final void configure(){

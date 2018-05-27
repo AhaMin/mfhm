@@ -14,6 +14,7 @@ import me.yokeyword.fragmentation.SupportActivity;
  */
 
 public abstract class ProxyActivity extends SupportActivity{
+
     public abstract MFHMDelegate setRootDelegate();
 
     @Override

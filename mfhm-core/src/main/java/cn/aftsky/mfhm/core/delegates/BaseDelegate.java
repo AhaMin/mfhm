@@ -20,6 +20,11 @@ public abstract class BaseDelegate extends SwipeBackFragment{
 
     public abstract Object setLayout();
 
+    /**
+     * 在这里进行初始化，子类就可以在ButterKinfe绑定了视图后，直接在onBindView中进行操作了
+     * @param savedInstanceState
+     * @param rootView
+     */
     public abstract void onBindView(@Nullable Bundle savedInstanceState,View rootView);
 
     /*根据Layout返回一个Fragment,一般就是根Fragment*/
@@ -33,7 +38,7 @@ public abstract class BaseDelegate extends SwipeBackFragment{
             rootView=(View) setLayout();
         }
         if(rootView!=null){
-            mUnbinder= ButterKnife.bind(this,rootView);
+            mUnbinder= ButterKnife.bind(this,rootView); //绑定初始化ButterKnife,在碎片当中绑定需要多加一个参数rootView
             onBindView(savedInstanceState,rootView);
         }
         return rootView;

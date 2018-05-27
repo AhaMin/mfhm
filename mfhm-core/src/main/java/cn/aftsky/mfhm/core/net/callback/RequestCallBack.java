@@ -27,7 +27,9 @@ public class RequestCallBack implements Callback<String> {
     @Override
     public void onResponse(Call<String> call, Response<String> response) {
         if (response.isSuccessful()) {
+            System.out.print("请求响应成功");
             if (call.isExecuted()) {
+                System.out.print("开始回调onSuccess");
                     RESPONSELISTENER.onSuccess(response.body());
             }
         } else {
