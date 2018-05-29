@@ -60,5 +60,5 @@ dependencies {
     compile 'com.orhanobut:logger:2.2.0'
     //test
     testCompile 'junit:junit:4.12'
-    compile project(':mfht-annotations')
+    compile project(':mfhm-annotations')
 }

@@ -12,7 +12,7 @@ import okhttp3.Request;
  */
 
 /**
- * 仅供测试使用!
+ * 仅供测试使用!拦截Http请求，直接返回JSON数据供测试
  */
 public abstract class BaseInterceptor implements Interceptor {
 

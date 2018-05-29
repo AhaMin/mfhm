@@ -1,1 +1,1 @@
-include ':app', ':mfht-annotations', ':mfhm-complier', ':mfhm-main', ':mfhm-core'
+include ':app', ':mfhm-annotations', ':mfhm-complier', ':mfhm-main', ':mfhm-core'
