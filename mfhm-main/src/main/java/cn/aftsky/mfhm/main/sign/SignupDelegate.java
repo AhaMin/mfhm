@@ -1,5 +1,6 @@
 package cn.aftsky.mfhm.main.sign;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -12,10 +13,12 @@ import butterknife.OnClick;
 import cn.aftsky.mfhm.core.delegates.MFHMDelegate;
 import cn.aftsky.mfhm.core.net.RestClient;
 import cn.aftsky.mfhm.core.net.callback.ResponseListenerAdapter;
+import cn.aftsky.mfhm.core.util.MyLogger;
 import cn.aftsky.mfhm.main.R;
 import cn.aftsky.mfhm.main.R2;
 
 /**
+ * 注册页面
  * Created by MaoHonglu on 2018/5/26.
  */
 
@@ -33,28 +36,67 @@ public class SignupDelegate extends MFHMDelegate {
     @BindView(R2.id.edit_sign_up_re_password)
     TextInputEditText mRePassword = null;
 
+    //用户登录注册回调监听
+    private ISignListener mISignListener = null;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof ISignListener) {
+            mISignListener = (ISignListener) activity;
+        }
+    }
+
+    //注册表单内容验证
     @OnClick(R2.id.btn_sign_up)
     void onClickSignUp() {
         if (checkForm()) {
-//            RestClient.builder()
-//                    .url("")
-//                    .params("name", mName.getText().toString())
-//                    .params("email", mEmail.getText().toString())
-//                    .params("phone", mPhone.getText().toString())
-//                    .params("password", mPassword.getText().toString())
-//                    .responseListener(new ResponseListenerAdapter(){
-//                        @Override
-//                        public void onSuccess(String response) {
-//                            super.onSuccess(response);
-//                            //具体的处理逻辑
-//                        }
-//                    })
-//                    .build()
-//                    .post();
+            RestClient.builder()
+                    .url("http://www.baidu.com")
+                    .params("name", mName.getText().toString())
+                    .params("email", mEmail.getText().toString())
+                    .params("phone", mPhone.getText().toString())
+                    .params("password", mPassword.getText().toString())
+                    .responseListener(new ResponseListenerAdapter(){
+                        @Override
+                        public void onSuccess(String response) {
+                            super.onSuccess(response);
+                            //具体的处理逻辑
+                            System.out.println("用户注册按钮Http响应成功！");
+                            MyLogger.json("用户注册", response);
+                            SignHandler.onSignUp(response, mISignListener);
+                        }
+                        @Override
+                        public void onRequestStart() {
+                            super.onRequestStart();
+                            System.out.println("请求开始！");
+                        }
+
+                        @Override
+                        public void onError(int code, String msg) {
+                            super.onError(code, msg);
+                            System.out.println("请求错误！"+code+":"+msg);
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            super.onFailure();
+                            System.out.println("请求失败！");
+                        }
+
+                        @Override
+                        public void onRequestEnd() {
+                            super.onRequestEnd();
+                            System.out.println("请求结束！");
+                        }
+                    })
+                    .build()
+                    .post();
             Toast.makeText(getContext(),"注册表单通过",Toast.LENGTH_LONG).show();
         }
     }
 
+    //跳转到登录页面
     @OnClick(R2.id.tv_link_sign_in)
     void onClickLink() {
         getSupportDelegate().start(new SigninDelegate());
@@ -69,6 +111,7 @@ public class SignupDelegate extends MFHMDelegate {
         final String rePassword = mRePassword.getText().toString();
 
         boolean isPass = true;
+
 
         if (name.isEmpty()) {
             mName.setError("请输入姓名");

@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import cn.aftsky.mfhm.core.app.AccountManager;
+import cn.aftsky.mfhm.core.app.IUserChecker;
 import cn.aftsky.mfhm.core.delegates.MFHMDelegate;
 import cn.aftsky.mfhm.core.util.PreferenceUtil;
 import cn.aftsky.mfhm.main.R;
@@ -72,22 +74,22 @@ public class LauncherScrollDelegate extends MFHMDelegate implements OnItemClickL
             System.out.println("执行了onItemClick这个方法！");
 //            System.out.println("PreferenceUtil.getAppFlag(ScrollLauncherTag.HAS_FIRST_LAUNCHER_APP.name());"+PreferenceUtil.getAppFlag(ScrollLauncherTag.HAS_FIRST_LAUNCHER_APP.name()));默认为false
             PreferenceUtil.setAppFlag(ScrollLauncherTag.HAS_FIRST_LAUNCHER_APP.name(), true);
-//            //检查用户是否已经登录
-//            AccountManager.checkAccount(new IUserChecker() {
-//                @Override
-//                public void onSignIn() {
-//                    if (mILauncherListener != null) {
-//                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.SIGNED);
-//                    }
-//                }
-//
-//                @Override
-//                public void onNotSignIn() {
-//                    if (mILauncherListener != null) {
-//                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.NOT_SIGNED);
-//                    }
-//                }
-//            });
+            //检查用户是否已经登录
+            AccountManager.checkAccount(new IUserChecker() {
+                @Override
+                public void onSignIn() {
+                    if (mILauncherListener != null) {
+                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.SIGNED);
+                    }
+                }
+
+                @Override
+                public void onNotSignIn() {
+                    if (mILauncherListener != null) {
+                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.NOT_SIGNED);
+                    }
+                }
+            });
         }
     }
 }

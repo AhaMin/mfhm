@@ -12,6 +12,8 @@ import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.aftsky.mfhm.core.app.AccountManager;
+import cn.aftsky.mfhm.core.app.IUserChecker;
 import cn.aftsky.mfhm.core.util.BaseTimerTask;
 import cn.aftsky.mfhm.core.util.ITimerListener;
 import cn.aftsky.mfhm.core.util.PreferenceUtil;
@@ -74,21 +76,21 @@ public class LauncherDelegate extends MFHMDelegate implements ITimerListener{
             getSupportDelegate().startWithPop(new LauncherScrollDelegate());
         } else {
               //检查用户是否登录了APP
-//            AccountManager.checkAccount(new IUserChecker() {
-//                @Override
-//                public void onSignIn() {
-//                    if (mILauncherListener != null) {
-//                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.SIGNED);
-//                    }
-//                }
-//
-//                @Override
-//                public void onNotSignIn() {
-//                    if (mILauncherListener != null) {
-//                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.NOT_SIGNED);
-//                    }
-//                }
-//            });
+            AccountManager.checkAccount(new IUserChecker() {
+                @Override
+                public void onSignIn() {
+                    if (mILauncherListener != null) {
+                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.SIGNED);
+                    }
+                }
+
+                @Override
+                public void onNotSignIn() {
+                    if (mILauncherListener != null) {
+                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.NOT_SIGNED);
+                    }
+                }
+            });
         }
     }
 

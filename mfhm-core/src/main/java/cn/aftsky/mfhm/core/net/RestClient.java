@@ -24,7 +24,7 @@ import retrofit2.Callback;
 
 public class RestClient {
     private final String URL;
-    private final Map<String, Object> PARAMS =new WeakHashMap<>();
+    private final Map<String, Object> PARAMS;
     private final IResponseListener RESPONSELISTENER;
     private final RequestBody MBODY;
     private final LoaderStyle LOADER_STYLE;
@@ -36,7 +36,7 @@ public class RestClient {
 
     public RestClient(String url, Map<String, Object> params,IResponseListener iResponseListener, RequestBody mbody, LoaderStyle loaderStyle, File file, String downloader_dir, String extension, String name, Context context) {
         this.URL = url;
-        PARAMS.putAll(PARAMS);
+        this.PARAMS=params;
         this.RESPONSELISTENER=iResponseListener;
         this.MBODY = mbody;
         this.CONTEXT = context;
@@ -66,10 +66,12 @@ public class RestClient {
     public final void post() {
         if (MBODY == null)
             request(HttpMethod.POST);
-        else if (!PARAMS.isEmpty()) {
-            throw new RuntimeException("params must be null");
-        } else
-            request(HttpMethod.POST_RAW);
+        else {
+            if (!PARAMS.isEmpty())
+                throw new RuntimeException("params must be null");
+            else
+                request(HttpMethod.POST_RAW);
+        }
     }
 
     public final void delete() {

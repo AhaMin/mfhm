@@ -42,6 +42,8 @@ public class RestCreater {
         private static final int TIME_OUT=60;
         private static final OkHttpClient.Builder BUILDER = new OkHttpClient.Builder();
         private static final ArrayList<Interceptor> INTERCEPTORS = MFHM.getConfiguration(ConfigType.INTERCEPTOR); //获取OkHttp拦截器
+//        private static final ArrayList<Interceptor> INTERCEPTORS = null;
+
 
         private static OkHttpClient.Builder addInterceptor() {
             if (INTERCEPTORS != null && !INTERCEPTORS.isEmpty()) {

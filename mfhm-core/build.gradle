@@ -56,7 +56,8 @@ dependencies {
 //    compile 'com.bigkoo:ConvenientBanner:2.1.2'//地址变ConvenientBanner 大写了，额。。。
     compile 'com.bigkoo:convenientbanner:2.0.5'
     compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
-
+    //Log依赖
+    compile 'com.orhanobut:logger:2.2.0'
     //test
     testCompile 'junit:junit:4.12'
     compile project(':mfht-annotations')
